@@ -4,8 +4,7 @@ import discord
 from dataclasses import dataclass
 
 BOT_TOKEN = "PUT_YOUR_TOKEN_HERE"
-CHANNEL_ID = 1025651504750800917
-MAX_SESSION_TIME_MINUTES = 45
+CHANNEL_ID = 1240326597580427370
 
 @dataclass
 class Session:
@@ -19,24 +18,13 @@ session = Session()
 async def on_ready():
     print("Hello! Study bot is ready!")
     channel = bot.get_channel(CHANNEL_ID)
-    await channel.send("Hello! Study bot is ready!")
-
-
-@tasks.loop(minutes=MAX_SESSION_TIME_MINUTES, count=2)
-async def break_reminder():
-
-    # Ignore the first execution of this command.
-    if break_reminder.current_loop == 0:
-        return
-
-    channel = bot.get_channel(CHANNEL_ID)
-    await channel.send(f"**Take a break!** You've been studying for {MAX_SESSION_TIME_MINUTES} minutes.")
+    await channel.send("Bot Is Online.")
 
 @bot.command()
 async def start(ctx):
-    if session.is_active:
-        await ctx.send("A session is already active!")
+        await ctx.send("Hello, lets start! what are you trying to do. A Purchase  B Claim Roles  C Talk To A Human. Please run the command ! then the option you picked.")
         return
+
 
     session.is_active = True
     session.start_time = ctx.message.created_at.timestamp()
@@ -45,11 +33,6 @@ async def start(ctx):
     await ctx.send(f"New session started at {human_readable_time}")
 
 
-@bot.command()
-async def end(ctx):
-    if not session.is_active:
-        await ctx.send("No session is active!")
-        return
 
     session.is_active = False
     end_time = ctx.message.created_at.timestamp()
